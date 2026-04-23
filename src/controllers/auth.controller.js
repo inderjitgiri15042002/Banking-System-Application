@@ -37,10 +37,17 @@ async function userRegisterController(req, res) {
       process.env.SECRET,
     );
 
+    res.cookie("token", token);
+
     res.status(201).json({
       success: true,
       message: "User Register Successfully",
-      newUser,
+      user: {
+        _id: newUser._id,
+        name: newUser.name,
+        email: newUser.email,
+      },
+      token,
     });
   } catch (err) {
     return res.status(500).json({
