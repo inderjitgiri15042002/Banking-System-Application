@@ -8,7 +8,7 @@ const userSchema = mongoose.Schema(
       required: [true, "Email is required for creating a user"],
       trim: true,
       lowercase: true,
-      match: ["^[^\s@]+@[^\s@]+\.[^\s@]+$", "InValid Email Address"],
+      match: [/^[^\s@]+@[^\s@]+\.[^\s@]+$/, "Invalid Email Address"],
       unique: [true, "Email already exists"],
     },
 
@@ -28,15 +28,11 @@ const userSchema = mongoose.Schema(
   },
 );
 
-userSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) {
-    return next();
-  }
+userSchema.pre("save", async function () {
+  if (!this.isModified("password")) return;
 
   const hash = await bcrypt.hash(this.password, 10);
   this.password = hash;
-
-  return next();
 });
 
 userSchema.methods.comparePassword = async function (password) {
