@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const sendEmail = require("../services/email.service.js");
 
 const userModel = require("../models/user.model");
 
@@ -57,6 +58,8 @@ async function userRegisterController(req, res) {
       },
       token,
     });
+
+    sendEmail(email, name);
   } catch (err) {
     return res.status(500).json({
       success: false,
