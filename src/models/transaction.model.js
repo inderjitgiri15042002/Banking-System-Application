@@ -14,7 +14,6 @@ const transactionSchema = new mongoose.Schema(
       required: [true, "Transaction must be accociated with a To account"],
       index: true,
     },
-
     status: {
       type: String,
       enum: {
